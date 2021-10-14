@@ -1,0 +1,120 @@
+﻿@model Mathance.Models.Post
+
+<h1 class="display-4">Edit a task</h1>
+<div class="container">
+<form method="post" enctype="multipart/form-data" asp-controller="Profile" asp-action="EditPost" asp-route-name="@Model.Author.Name">
+    <div class="container">
+        <div class="form-group">        
+            <label for="topic">Topic</label>
+            <select class="form-select" placeholder="Topic" name="topic" id="topic" value="@Model.Topic" required>
+                <option>Math</option>
+                <option>Java</option>
+                <option>.Net</option>
+                <option>C++</option>
+                <option>Python</option>
+            </select>
+        </div>
+        
+        <div class="form-group">        
+            <label for="title">Title</label>
+            <input type="text" class="form-control" placeholder="Title" name="title" id="title" value="@Model.Title" required>
+        </div>
+
+        <div class="form-group">        
+            <label for="text">Text</label>
+            <input type="text" class="form-control" placeholder="Text" name="text" id="text" value="@Model.Text" required>
+        </div>
+
+        <div class="form-group">
+            Current images:
+            @foreach(var i in @Model.Images)
+                {
+                    <div class="nav-item img-small" data-toggle="modal"><img src="@i.Link" class="img-fluid"></div>
+                }
+        </div>
+        <div class="alert alert-warning" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> If you change current list of images you'll need to upload <b>all</b> images once again.
+        </div>
+        <div class="form-group">
+            <div class="custom-file mt-1">
+                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                <input name="images" type="file" class="custom-file-input form-control" id="inputGroupFile01" accept=".jpg, .png, .jpeg" multiple/>
+            </div>
+        </div>
+        
+        <div class="form-group">
+        Current tags:
+        @foreach(var t in Model.Tags)
+            {
+                <a class='badge badge-light'>@t.Name</a>
+            }
+        </div>
+        <div class="form-group">        
+            <label>New tags</label>
+            <input type="text" class="form-control" placeholder="Tag" name="tags" required>
+                <div id="inputTag0"></div>
+            <button class="btn btn-red-light-alt" onclick="addTagInput()">One more tag!</button>
+        </div>
+
+        <div class="form-group">
+        Current answers:
+        @foreach(var a in Model.RightAnswers)
+            {
+                <a class='badge badge-light'>@a.Data</a>
+            }
+        </div>
+        <div class="form-group">        
+            <label>New answers</label>
+            <input type="text" class="form-control" placeholder="Answer" name="rightanswers" required>
+            <div id="inputAnswer0"></div>
+            <button class="btn btn-red-light-alt" onclick="addAnswerInput()">One more answer!</button>
+        </div>
+        
+        <div class="form-group text-right">
+            <input type="submit" class="btn btn-red-light" value="Save"/>
+        </div>
+    </div>
+</form>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.0-rc.2/jquery-ui.min.js" ></script>
+<script>
+    let tagsData = $.ajax('/Posts/GetTagsList', {
+                contentType: "application/json",
+                    dataType: "json",
+                    type: "GET",
+                    global: false,
+                    async:false,
+                    success: function(response) {
+                        return response;
+                },
+                error: function(data) {
+                    alert(data);
+                }
+            }).responseText;
+    $("#tag").autocomplete({
+                source: JSON.parse(tagsData)
+            , messages: {
+                noResults: "", results: ""
+            }
+            }
+            );
+</script>
+<script>
+    let iteratorForTags = 0;
+    function addTagInput() {
+    document.getElementById('inputTag' + iteratorForTags).innerHTML =
+        '<input type="text" class="form-control mt-2" id="tag" placeholder="Tag" name="tags" required>' +
+        '<div id="inputTag' + (iteratorForTags + 1) + '"></div>';
+    iteratorForTags++;
+}
+
+    let iteratorForAnswers = 0;
+    function addAnswerInput() {
+    document.getElementById('inputAnswer' + iteratorForAnswers).innerHTML =
+        '<input type="text" class="form-control mt-2" id="answer" placeholder="Answer" name="rightanswers" required>' +
+        '<div id="inputAnswer' + (iteratorForAnswers + 1) + '"></div>';
+    iteratorForAnswers++;
+}
+</script>

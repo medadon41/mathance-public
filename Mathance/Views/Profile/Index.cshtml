@@ -1,0 +1,104 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Mathance.Areas.Identity.Data
+
+@model Mathance.Areas.Identity.Data.MathanceUser
+@inject UserManager<MathanceUser> UserManager
+@{
+    ViewData["Title"] = ViewBag.name;
+}
+<div class="user-stats text-center">
+    <h2 class="display-4">@Model.UserName</h2>
+    <p>a little bit of your stats:</p>
+    <div class="d-flex justify-content-between">
+        <div>
+            <h1 class="display-3">@Model.Posts.Count</h1>
+            <p>tasks created</p>
+        </div>
+        <div>
+            <h1 class="display-3">@Model.RightAnswers.Count</h1>
+            <p>tasks solved</p>
+        </div>
+        <div>
+            <h1 class="display-3">@DateTime.UtcNow.Subtract(Model.RegDate).Days</h1>
+            <p>days with us</p>
+        </div>
+    </div>
+</div>
+
+<hr />
+<div class="posts-container">
+@if(Model.Posts.Count == 0) {
+    <div class="empty-table text-center">
+    <h2 class="display-4">Your tasks list is empty</h2>
+    <h5>Time <a asp-controller="Profile" asp-action="Create" asp-route-name="@ViewBag.name">to create one</a>, isn't it?</h5>
+    </div>
+}
+else
+{
+<div class="text-center">
+     @if (UserManager.GetUserId(User) == Model.Id || User.IsInRole("admin")) {
+        <a asp-controller="Profile" asp-action="Create" asp-route-name="@ViewBag.name"><button class="btn btn-red-light" >Create a task</button></a>
+     }
+<table class="table table-stripped text-center table-responsive-sm" id="users">
+        <thead class="thead-dark">
+            <tr>   
+                <th>
+                    Topic
+                </th>
+                <th>
+                    Title
+                </th>
+                <th>
+                    Posted Date
+                </th>
+                <th>
+                    Comments
+                </th>
+                <th>
+                    Watch
+                </th>
+                    @if (UserManager.GetUserId(User) == Model.Id || User.IsInRole("admin"))
+                    {
+                        <th>
+                            Edit
+                        </th>
+                        <th>
+                            Delete
+                        </th>
+                    }
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model.Posts) {
+            <tr>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Topic)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.PostedDate)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Comments.Count)
+                </th>
+                <th>
+                    <a href="~/Posts/Post/@item.Id"><i class="bi bi-eye" fill="#00BFFF"></i></a>
+                </th>
+                @if (UserManager.GetUserId(User) == Model.Id || User.IsInRole("admin"))
+                    {
+                    <th>
+                        <a asp-controller="Profile" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil" fill="#00BFFF"></i></a>
+                    </th>
+                    <th>
+                        <a asp-controller="Profile" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash" fill="#00BFFF"></i></a>
+                    </th>
+                    }
+            </tr>
+    }
+        </tbody>
+    </table>
+    </div>
+}
+</div>

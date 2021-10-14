@@ -1,0 +1,77 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Mathance.Areas.Identity.Data
+@using System.Linq
+
+@inject UserManager<MathanceUser> UserManager
+
+@model IEnumerable<Mathance.Areas.Identity.Data.MathanceUser>
+
+<table class="table table-stripped" id="users">
+        <thead class="thead-dark">
+            <tr> 
+                <th>
+                    Id
+                </th>
+                <th>
+                    UserName
+                </th>
+                <th>
+                    Reg Date
+                </th>
+                <th>
+                    Role
+                </th>
+                <th>
+                    See
+                </th>
+                <th>
+                    Block
+                </th>
+                <th>
+                    Delete
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Id)
+             </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.RegDate)
+                </th>
+                <th>
+                    @((await UserManager.GetRolesAsync(item)).FirstOrDefault())
+                     @if(await UserManager.IsInRoleAsync(item, "admin"))
+                    {
+                        <a asp-controller="Admin" asp-action="ToggleAdmin" asp-route-id="@item.Id"><i class="bi bi-person-dash" fill="#00BFFF"></i></a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Admin" asp-action="ToggleAdmin" asp-route-id="@item.Id"><i class="bi bi-person-plus" fill="#00BFFF"></i></a>
+                    }
+                </th>
+                <th>
+                    <a asp-controller="Profile" asp-action="Index" asp-route-name="@item.UserName"><i class="bi bi-eye" fill="#00BFFF"></i></a>
+                </th>
+                <th>
+                    @if(item.IsBlocked)
+                    {
+                        <a asp-controller="Admin" asp-action="ToggleBlock" asp-route-id="@item.Id"><i class="bi bi-unlock" fill="#00BFFF"></i></a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Admin" asp-action="ToggleBlock" asp-route-id="@item.Id"><i class="bi bi-lock" fill="#00BFFF"></i></a>
+                    }
+                </th>
+                <th>
+                   <a asp-controller="Admin" asp-action="DeleteUser" asp-route-id="@item.Id"><i class="bi bi-trash" fill="#00BFFF"></i></a>
+                </th>
+            </tr>
+    }
+        </tbody>
+    </table>

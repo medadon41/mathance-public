@@ -1,0 +1,176 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* Provide sufficient contrast against white background */
+a {
+  color: #0366d6;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  font-size: 14px;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.border-top {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px; /* Vertically center the text there */
+}
+
+.header-logo {
+    max-width: 30%;
+    height: auto;
+}
+
+.bg-style-1 {
+    background-color: #ef3038;
+}
+
+.header-link {
+    font-size: 1.2rem;
+    transition: .2s;
+}
+
+.post-images {
+    flex-direction: row;
+}
+
+.post-header {
+    border-bottom: 1px solid black;
+    margin-bottom: 16px;
+}
+
+.form-control {
+    border-color: #ef3038;
+}
+
+.custom-file-label {
+    border-color: #ef3038;
+}
+
+a {
+    color: #ef3038;
+}
+
+a:hover {
+    color: #ef3038;
+    text-decoration-color: #ef3038;
+}
+
+.btn-red-light {
+    color: white;
+    background-color: #ef3038;
+}
+
+.btn-red-light-secondary {
+    color: white;
+    background-color: #ef3038;
+}
+
+.btn-red-light-alt {
+    color: #ef3038;
+    background-color: white;
+    border-color: #ef3038;
+}
+
+.btn-red-light:hover {
+    border-color: #ef3038;
+    color: #ef3038;
+    background-color: white;
+}
+
+.btn-red-light:focus {
+    box-shadow: 0 0 0 .2rem #ff9eb5;
+}
+
+.btn-red-light-secondary:hover {
+    color: white;
+    background-color: #d10031;
+}
+
+.btn-red-light-alt:hover {
+    color: white;
+    background-color: #ef3038;
+    border-color: #ef3038;
+}
+
+.btn-red-light-secondary:focus {
+    box-shadow: 0 0 0 .2rem #ff9eb5;
+}
+
+.form-control:focus {
+    border-color: #ef3038;
+    box-shadow: 0 0 0 .2rem #ff9eb5;
+}
+
+.btn-green-light {
+    color: white;
+    background-color: #5fe620;
+}
+
+.btn-green-light:hover {
+    border-color: #5fe620;
+    color: #5fe620;
+    background-color: white;
+}
+
+.btn-green-light:focus {
+    box-shadow: 0 0 0 .2rem #c2ff99;
+}
+
+.img-small {
+    max-width: 9.375em;
+}

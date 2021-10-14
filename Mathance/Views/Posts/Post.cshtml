@@ -1,0 +1,138 @@
+﻿@model Mathance.Models.Post
+
+<div class="post-container">
+    <div class="post-header">
+        <div class="post-title">
+         <h1>@Model.Title</h1>
+            @if(ViewBag.isSolved)
+            {
+             <button type="button" class="btn btn-green-light float-right">
+                    <i class="bi bi-check2"></i> Solved!
+                </button>
+            } 
+            else if(ViewBag.currentUser == null) {
+                <button type="button" class="btn btn-red-light-secondary float-right" data-toggle="modal" data-target="#answerSubmit" disabled>
+                    <i class="bi bi-lightbulb"></i> Submit a solution
+                </button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-red-light float-right" data-toggle="modal" data-target="#answerSubmit">
+                    <i class="bi bi-lightbulb"></i> Submit a solution
+                </button>
+            }
+            <div class="modal fade" id="answerSubmit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                             <h5 class="modal-title" id="exampleModalLabel">Submit an answer</h5>
+                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                             </button>
+                        </div>
+                        <form method="post" asp-controller="Posts" asp-action="SubmitAnswer" asp-route-id=@Model.Id>
+                        <div class="modal-body">
+                        <input type="text" class="form-control" placeholder="Your answer"/ name="answer">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-red-light-secondary">Check</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+         </div>
+         <p>Posted on @Model.PostedDate.ToString("HH:mm MM.dd.yyyy") by <a href="#">@Model.Author.UserName</a></p>
+         <p>Topic: <a href="#">@Model.Topic</a></p>
+
+    </div>
+    <div class="post-body">
+         <p>@Model.Text</p>
+         <ul class="navbar-nav flex-grow-1 post-images">
+            @foreach(var i in Model.Images)
+            {
+                <li class="nav-item img-small" data-toggle="modal" data-target="#imgFullSize_@i.Id"><img src="@i.Link" class="img-fluid"></li>
+                <div class="modal fade" id="imgFullSize_@i.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <img src="@i.Link" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+            }
+        </ul>
+        <p>Tags: 
+            @foreach(var t in Model.Tags)
+            {
+                <a class='badge badge-light'>@t.Name</a>
+            }
+        </p>
+    </div>
+    </div>
+    <hr />
+    <div class="post-comments">
+    @if(ViewBag.currentUser == null)
+    {
+        <div class="text-center">
+            <h6 class="font-weight-light">Please <a href="~/Identity/Account/Login">log in</a> to leave a comment</h6>
+        </div>
+        <hr/>
+    } 
+    else 
+    {
+    <form method="post">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control comment-input" id="comment-input" name="@ViewBag.CurrentUser.UserName" placeholder="Leave a comment" aria-describedby="button-addon2" name="text">
+                <button type="submit" class="btn btn-red-light" id="button-addon2" name="@Model.Id" href="#">Submit</button>
+        </div>
+        </form>
+    }
+    <div id="comments">
+    @if(Model.Comments.Count > 0)
+    {
+        @foreach(var c in Model.Comments)
+        {
+            <div class="comment">
+                <div>
+                    @if (c.Author == null)
+                    {
+                        <b>DELETED_USER </b>
+                    } 
+                    else
+                    {
+                       <b>@c.Author.UserName </b> 
+                    }
+                <i class="font-weight-light mt-1">on @c.PostedTime.ToString("HH:mm MM.dd.yy")</i></div>
+            <div>@c.Text</div>
+            <a asp-controller="Posts" asp-action="CommentLike" asp-route-id="@Model.Id" asp-route-commId="@c.Id">
+                    @if ((c.Likes.Select(a => a.User).ToList()).Contains(ViewBag.CurrentUser))
+                    {
+                        <i class="bi bi-chevron-double-up" fill="#00BFFF"></i>
+                    } else
+                    {
+                        <i class="bi bi-chevron-up" fill="#00BFFF"></i>
+                    }
+            </a>
+            <label>@c.Likes.Count</label>
+
+            <a asp-controller="Posts" asp-action="CommentDislike" asp-route-id="@Model.Id" asp-route-commId="@c.Id">
+                    @if ((c.Dislikes.Select(a => a.User).ToList()).Contains(ViewBag.CurrentUser))
+                    {
+                        <i class="bi bi-chevron-double-down" fill="#00BFFF"></i>
+                    } else
+                    {
+                        <i class="bi bi-chevron-down" fill="#00BFFF"></i>
+                    }
+            </a>
+            <label>@c.Dislikes.Count</label>
+            </div>
+            <hr/>
+        }
+    }
+    </div>
+</div>
+</div>
+
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/comments.js"></script>
