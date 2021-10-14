@@ -5,4 +5,5 @@ TBA:
 * signalR improvment (currently likes and dislikes require page reload to be submitted)
 * markdown
 * tags auto-complete improvement
+* code improvements
 * other minor improvements (alerts, profile look for admins and etc.)
