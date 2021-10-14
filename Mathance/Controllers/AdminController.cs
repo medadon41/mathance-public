@@ -1,5 +1,6 @@
 ﻿using Mathance.Areas.Identity.Data;
 using Mathance.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Mathance.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class AdminController : Controller
     {
         private readonly MathanceContext _context;
@@ -21,12 +23,14 @@ namespace Mathance.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
         }
+
+        [Authorize(Roles = "admin")]
         public IActionResult UsersTable()
         {
             var userlist = _context.Users.ToList();
             return View(userlist);
         }
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteUser(string id)
         {
             var user = _context.Users
@@ -58,6 +62,7 @@ namespace Mathance.Controllers
             return Redirect("/Admin/UsersTable");
         }
 
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> ToggleBlock(string id)
         {
             var user = _context.Users
@@ -68,6 +73,7 @@ namespace Mathance.Controllers
             return Redirect("/Admin/UsersTable");
         }
 
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> ToggleAdmin(string id)
         {
             var user = _context.Users
