@@ -1,5 +1,7 @@
 ﻿@model Mathance.Models.Post
+
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.5/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
 
 <h1 class="display-4">Create a task</h1>
 <div class="container">
@@ -21,30 +23,31 @@
             <input type="text" class="form-control" placeholder="Title" name="title" id="title" required>
         </div>
 
-        <div class="form-group">        
-            <label for="text">Text</label>
-            <input type="text" class="form-control" placeholder="Text" name="text" id="text" required>
+        <div class="form-group">
+            <div class="mdeContainer">
+                <label for="text">Text</label>
+                <textarea name="text" class="form-control" id="text" rows="5" required></textarea>
+            </div>
         </div>
 
         <div class="form-group">
             <div class="custom-file mt-1">
-                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-                <input name="images" type="file" class="custom-file-input form-control" id="inputGroupFile01" accept=".jpg, .png, .jpeg" multiple/>
+                <input name="images" type="file" id="inputGroupFile01" accept=".jpg, .png, .jpeg" multiple/>
             </div>
         </div>
         
         <div class="form-group">        
             <label>Tags</label>
-            <input type="text" id="tag" class="form-control" placeholder="Tag " name="tags" autocomplete="off" required>
-                <div id="inputTag0"></div>
-            <button class="btn btn-red-light-alt" onclick="addTagInput()">One more tag!</button>
+            <input type="text" id="tag0" class="form-control" placeholder="Tag " name="tags" autocomplete="off" required>
+            <div id="inputTag"></div>
+            <button type="button" id="add-tag" class="btn btn-red-light-alt" onclick="addTagInput()">One more tag!</button>
         </div>
 
         <div class="form-group">        
             <label>Possible answers</label>
-            <input type="text" class="form-control" placeholder="Answer" name="rightanswers" required>
+            <input id="answer" type="text" class="form-control" placeholder="Answer" name="rightanswers" required>
             <div id="inputAnswer0"></div>
-            <button class="btn btn-red-light-alt" onclick="addAnswerInput()">One more answer!</button>
+            <button type="button" class="btn btn-red-light-alt" onclick="addAnswerInput()">One more answer!</button>
         </div>
         
         <div class="form-group text-right">
@@ -56,43 +59,58 @@
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.0-rc.2/jquery-ui.min.js" ></script>
-<script>
-    let tagsData = $.ajax('/Posts/GetTagsList', {
-                contentType: "application/json",
-                    dataType: "json",
-                    type: "GET",
-                    global: false,
-                    async:false,
-                    success: function(response) {
-                        return response;
-                },
-                error: function(data) {
-                    alert(data);
-                }
-            }).responseText;
-    $("#tag").autocomplete({
-                source: JSON.parse(tagsData)
-            , messages: {
-                noResults: "", results: ""
-            }
-            }
-            );
-</script>
-<script>
-    let iteratorForTags = 0;
-    function addTagInput() {
-    document.getElementById('inputTag' + iteratorForTags).innerHTML =
-        '<input type="text" class="form-control mt-2" id="tag" placeholder="Tag" name="tags" required>' +
-        '<div id="inputTag' + (iteratorForTags + 1) + '"></div>';
-    iteratorForTags++;
-}
+<script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.5/js/fileinput.min.js"></script>
 
-    let iteratorForAnswers = 0;
+<script> 
+    let tags = $.ajax('/Posts/GetTagsList', {
+        contentType: "application/json",
+            dataType: "json",
+            type: "GET",
+            global: false,
+            async:false,
+            success: function(response) {
+                return response;
+        },
+        error: function(data) {
+            alert(data);
+        }
+    }).responseText;
+    
+    $("#tag0").autocomplete({ source: JSON.parse(tags) });
+
+    let iteratorForTags = 0;
+    $("#add-tag").click(() => {
+        let el = $('<input type="text" class="form-control mt-2" id="tag'+ (iteratorForTags + 1) +'" placeholder="Tag" name="tags" required>')
+            .on('click', (function(e) { 
+                $(this).autocomplete({ source: JSON.parse(tags) })
+            }));
+        $("#inputTag").append(el);
+        iteratorForTags++;
+    });
+    
+    let iteratorForAnswers = 0; 
     function addAnswerInput() {
-    document.getElementById('inputAnswer' + iteratorForAnswers).innerHTML =
-        '<input type="text" class="form-control mt-2" id="answer" placeholder="Answer" name="rightanswers" required>' +
-        '<div id="inputAnswer' + (iteratorForAnswers + 1) + '"></div>';
-    iteratorForAnswers++;
-}
+        document.getElementById('inputAnswer' + iteratorForAnswers).innerHTML = 
+            '<input type="text" class="form-control mt-2" id="answer" placeholder="Your answer" name="rightanswers" required>' +
+            '<div id="inputAnswer' + (iteratorForAnswers + 1) + '"></div>';
+        iteratorForAnswers++;
+    }
+
+    $("#inputGroupFile01").fileinput({
+        allowedFileTypes: ['image'],
+        allowedFileExtensions : ['jpg', 'jpeg', 'png'],
+        showZoom: false,
+        uploadAsync: false,
+        dropZoneEnabled: true,
+        showUpload: false,
+        showRemove: true,
+        showPreview: true,
+        showBrowse: true,
+        showCaption: false,
+        showUploadStats: false,
+        showCancel: false,
+        showClose:false,
+        browseOnZoneClick: true
+    });
 </script>
 

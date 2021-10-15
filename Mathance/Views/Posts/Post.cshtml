@@ -48,7 +48,7 @@
 
     </div>
     <div class="post-body">
-         <p>@Model.Text</p>
+         <div id="text">@Model.Text</div>
          <ul class="navbar-nav flex-grow-1 post-images">
             @foreach(var i in Model.Images)
             {
@@ -88,12 +88,12 @@
         </div>
         </form>
     }
-    <div id="comments">
+    <div class="comments" id="@Model.Id">
     @if(Model.Comments.Count > 0)
     {
         @foreach(var c in Model.Comments)
         {
-            <div class="comment">
+            <div class="comment" id="@c.Id">
                 <div>
                     @if (c.Author == null)
                     {
@@ -105,27 +105,23 @@
                     }
                 <i class="font-weight-light mt-1">on @c.PostedTime.ToString("HH:mm MM.dd.yy")</i></div>
             <div>@c.Text</div>
-            <a asp-controller="Posts" asp-action="CommentLike" asp-route-id="@Model.Id" asp-route-commId="@c.Id">
                     @if ((c.Likes.Select(a => a.User).ToList()).Contains(ViewBag.CurrentUser))
                     {
-                        <i class="bi bi-chevron-double-up" fill="#00BFFF"></i>
+                        <a id="comment-like-@c.Id" class="comment-like bi bi-chevron-double-up" name="@ViewBag.CurrentUser.UserName" href="#"></a>
                     } else
                     {
-                        <i class="bi bi-chevron-up" fill="#00BFFF"></i>
+                        <a id="comment-like-@c.Id" class="comment-like bi bi-chevron-up" name="@ViewBag.CurrentUser.UserName" href="#"></a>
                     }
-            </a>
-            <label>@c.Likes.Count</label>
+            <label id="likes-count-@c.Id">@c.Likes.Count</label>
 
-            <a asp-controller="Posts" asp-action="CommentDislike" asp-route-id="@Model.Id" asp-route-commId="@c.Id">
-                    @if ((c.Dislikes.Select(a => a.User).ToList()).Contains(ViewBag.CurrentUser))
+                     @if ((c.Dislikes.Select(a => a.User).ToList()).Contains(ViewBag.CurrentUser))
                     {
-                        <i class="bi bi-chevron-double-down" fill="#00BFFF"></i>
+                        <a id="comment-dislike-@c.Id" class="comment-dislike bi bi-chevron-double-down" name="@ViewBag.CurrentUser.UserName" href="#"></a>
                     } else
                     {
-                        <i class="bi bi-chevron-down" fill="#00BFFF"></i>
+                        <a id="comment-dislike-@c.Id" class="comment-dislike bi bi-chevron-down" name="@ViewBag.CurrentUser.UserName" href="#"></a>
                     }
-            </a>
-            <label>@c.Dislikes.Count</label>
+            <label id="dislikes-count-@c.Id">@c.Dislikes.Count</label>
             </div>
             <hr/>
         }
@@ -133,6 +129,10 @@
     </div>
 </div>
 </div>
-
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/comments.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.7/marked.min.js"></script>
+<script>
+    document.getElementById('text').innerHTML = marked("@Model.Text");
+</script>

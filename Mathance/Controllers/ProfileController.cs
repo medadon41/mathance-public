@@ -63,6 +63,7 @@ namespace Mathance.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePost(Post post, List<IFormFile> images, List<string> tags, List<string> rightanswers, string name)
         {
+            post.Text = post.Text.Replace(Environment.NewLine, @"\r\n");
             _context.Posts.Add(post);
 
             post.Author = _context.Users.FirstOrDefault(i => i.UserName == name);
@@ -85,6 +86,9 @@ namespace Mathance.Controllers
                         .Include(ra => ra.RightAnswers)
                         .Where(p => p.Id == id)
                         .FirstOrDefault();
+
+            ViewBag.Name = post.Author.UserName;
+            post.Text = post.Text.Replace(@"\r\n", Environment.NewLine);
             return View(post);
         }
 
@@ -117,7 +121,7 @@ namespace Mathance.Controllers
             post.Author = post.Author = _context.Users.FirstOrDefault(i => i.UserName == name); 
 
             var tagslist = GetTags(post, tags);
-            if (!post.Tags.SequenceEqual(tagslist))
+            if (!post.Tags.SequenceEqual(tagslist) && tags.First() != null)
             {
                 post.Tags.RemoveRange(0, post.Tags.Count);
                 post.Tags.AddRange(tagslist);
@@ -129,11 +133,13 @@ namespace Mathance.Controllers
             }
 
             var answerslist = GetAnswers(post, rightanswers);
-            if (!post.RightAnswers.SequenceEqual(answerslist))
+            if (!post.RightAnswers.SequenceEqual(answerslist) && rightanswers.First() != null)
             {
                 post.RightAnswers.RemoveRange(0, post.RightAnswers.Count);
                 post.RightAnswers.AddRange(GetAnswers(post, rightanswers));
             }
+
+            post.Text = post.Text.Replace(Environment.NewLine, @"\r\n");
             await _context.SaveChangesAsync();
             return Redirect($"/Posts/Post/{post.Id}");
         }

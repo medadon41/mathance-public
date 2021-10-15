@@ -94,79 +94,6 @@ namespace Mathance.Controllers
             post.Comments.Add(comment);
             await _context.SaveChangesAsync();
         }
-        private Comment GetCurrentComment(int? id, int commId)
-        {
-            var post = _context.Posts
-                .Include(c => c.Comments)
-                    .ThenInclude(l => l.Likes)
-                        .ThenInclude(a=>a.User)
-                .Include(c => c.Comments)
-                    .ThenInclude(d => d.Dislikes)
-                        .ThenInclude(a=>a.User)
-                .FirstOrDefault(p => p.Id == id);
-
-            return post.Comments.FirstOrDefault(i => i.Id == commId);
-        } 
-
-        [Authorize]
-        public async Task<IActionResult> CommentLike(int? id, int commId)
-        {
-            var currentUser = await _userManager.FindByIdAsync(_userManager.GetUserId(User));
-            var currentComment = GetCurrentComment(id, commId);
-
-            var usersLiked = currentComment.Likes.Select(a => a.User).ToList();
-            var usersDisliked = currentComment.Dislikes.Select(a => a.User).ToList();
-
-            //if user already liked current comment, removes their like
-            if (usersLiked.Contains(currentUser))
-            {
-                Like userLike = currentComment.Likes.Where(a => a.User.Equals(currentUser)).First();
-                currentComment.Likes.Remove(userLike);
-                await _context.SaveChangesAsync();
-                return Redirect($"/Posts/Post/{id}");
-            }
-            currentComment.Likes.Add(new Like { Comment = currentComment, User = currentUser});
-
-            //if user already have a dislike on the current comment, removes dislike
-            if (usersDisliked.Contains(currentUser))
-            {
-                Dislike userDislike = currentComment.Dislikes.Where(a => a.User.Equals(currentUser)).First();
-                currentComment.Dislikes.Remove(userDislike);
-            }
-            await _context.SaveChangesAsync();
-
-            return Redirect($"/Posts/Post/{id}");
-        }
-        [Authorize]
-        public async Task<IActionResult> CommentDislike(int? id, int commId)
-        {
-            var currentUser = await _userManager.FindByIdAsync(_userManager.GetUserId(User));
-            var currentComment = GetCurrentComment(id, commId);
-
-            var usersLiked = currentComment.Likes.Select(a => a.User).ToList();
-            var usersDisliked = currentComment.Dislikes.Select(a => a.User).ToList();
-
-            //if user already disliked current comment, removes their dislike
-            if (usersDisliked.Contains(currentUser))
-            {
-                Dislike userLike = currentComment.Dislikes.Where(a => a.User.Equals(currentUser)).First();
-                currentComment.Dislikes.Remove(userLike);
-                await _context.SaveChangesAsync();
-                return Redirect($"/Posts/Post/{id}");
-            }
-            currentComment.Dislikes.Add(new Dislike { Comment = currentComment, User = currentUser });
-
-            //if user already have a like on the current comment, removes like
-            if (usersLiked.Contains(currentUser))
-            {
-                Like userLike = currentComment.Likes.Where(a => a.User.Equals(currentUser)).First();
-                currentComment.Likes.Remove(userLike);
-            }
-            await _context.SaveChangesAsync();
-
-            return Redirect($"/Posts/Post/{id}");
-        }
-
         
         public async Task<IActionResult> SubmitAnswer(int? id, string answer)
         {
@@ -206,7 +133,7 @@ namespace Mathance.Controllers
 
         public IActionResult GetTagsList()
         {
-            var tagsList = _context.Tags.Select(t => t.Name).ToList();
+            var tagsList = _context.Tags.Select(t => t.Name).Distinct().AsNoTracking().ToList();
             var list = JsonConvert.SerializeObject(tagsList,
                 Formatting.None,
                 new JsonSerializerSettings()
