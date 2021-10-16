@@ -6,5 +6,7 @@ TBA:
 * ~~markdown~~
 * ~~tags auto-complete improvement~~
 * main page (table with filters, sorts)
+* localization
+* theme-switching
 * code improvements
 * other minor improvements (alerts, profile look for admins and etc.)
