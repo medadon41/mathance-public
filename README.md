@@ -1,7 +1,7 @@
 # Mathance - Itransition Course Project
 ***
 TBA:
-* full-text search
+* ~~full-text search~~
 * signalR improvement ~~(currently likes and dislikes require page reload to be submitted)~~
 * ~~markdown~~
 * ~~tags auto-complete improvement~~
