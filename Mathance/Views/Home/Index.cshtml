@@ -1,8 +1,13 @@
-﻿@{
-    
-}
+﻿@model IEnumerable<Mathance.Models.Post>
 
 <div class="text-center">
     <h1 class="display-4">@ViewBag.title</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+@ViewBag.Msg
+
+@foreach(var item in Model)
+{
+    <p>@item.Title</p>
+}

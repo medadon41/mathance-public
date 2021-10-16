@@ -15,6 +15,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mathance.Hubs;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using System.Text.Json;
 
 namespace Mathance
 {
@@ -50,7 +53,10 @@ namespace Mathance
 
             services.AddControllersWithViews();
             services.AddRazorPages();
-            services.AddSignalR();
+            services.AddSignalR()
+                .AddJsonProtocol(options => {
+                    options.PayloadSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+                });
 
             services.AddAuthentication().AddFacebook(facebookOptions =>
             {
@@ -113,6 +119,7 @@ namespace Mathance
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
                 endpoints.MapHub<CommentHub>("/commentHub");
+                endpoints.MapHub<SearchHub>("/searchHub");
             });
         }
     }
