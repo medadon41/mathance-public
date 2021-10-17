@@ -23,32 +23,24 @@ namespace Mathance.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult Index(string sort)
         {
-            List<Post> results = _context.Posts
-                 .Where(f => EF.Functions.FreeText(f.Text, "ras")).AsNoTracking().ToList();
-
-            if (results.Count == 0)
-            {
-                List<Comment> comments = _context.Comments
-                    .Include(p => p.Post)
-                    .Where(f => EF.Functions.FreeText(f.Text, "ras")).AsNoTracking().ToList();
-                if (comments.Count != 0)
-                {
-                    ViewBag.Msg = "??";
-                    results = comments.Select(p => p.Post).ToList();
-                    foreach (var item in results)
-                    {
-                        item.Comments = null;
-                    }
-                }
-            }
-            return View(results);
+            var posts = GetPostsList();
+            posts.Reverse();
+            ViewBag.AllTags = _context.Tags.Select(t => t.Name).Distinct().ToList();
+            if (sort == "Rating") posts = posts
+                                          .OrderByDescending(r => r.Rating).ToList();
+            return View(posts);
         }
 
-        public IActionResult Privacy()
+        public List<Post> GetPostsList()
         {
-            return View();
+            List<Post> posts = _context.Posts
+                .Include(c => c.Author)
+                .Include(k => k.Comments)
+                .Include(t => t.Tags).ToList();
+            return posts;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

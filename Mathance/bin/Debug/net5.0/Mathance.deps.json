@@ -324,6 +324,14 @@
         "runtime": {
           "Mathance.dll": {}
         },
+        "resources": {
+          "en/Mathance.resources.dll": {
+            "locale": "en"
+          },
+          "ru/Mathance.resources.dll": {
+            "locale": "ru"
+          }
+        },
         "compile": {
           "Mathance.dll": {}
         }

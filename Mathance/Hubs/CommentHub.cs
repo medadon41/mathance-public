@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -126,6 +127,46 @@ namespace Mathance.Hubs
             await _context.SaveChangesAsync();
 
             await Clients.All.SendAsync("ReceiveDislike", comm, currentComment.Likes.Count, currentComment.Dislikes.Count, hasDisliked);
+        }
+
+        public async Task TrySearch(string searchText)
+        {
+            Post[] results = _context.Posts
+                .Where(f => EF.Functions.FreeText(f.Text, searchText)).ToArray();
+
+            if (results.Length == 0)
+            {
+                List<Comment> comments = _context.Comments
+                    .Include(p => p.Post)
+                    .Where(f => EF.Functions.FreeText(f.Text, searchText)).ToList();
+                if (comments.Count != 0)
+                {
+                    results = comments.Select(p => p.Post).ToArray();
+                }
+            }
+
+            await Clients.All.SendAsync("SearchResult", results);
+        }
+
+        public async Task Rate(string rate, string postid)
+        {
+            int rating = int.Parse(rate);
+            var postId = int.Parse(postid);
+
+            Post post = _context.Posts
+                        .FirstOrDefault(p => p.Id == postId);
+
+            if(post.Rating == 0)
+            {
+                post.Rating += rating;
+                await _context.SaveChangesAsync();
+                await Clients.All.SendAsync("SearchResult", post.Rating);
+                return;
+            }
+
+            post.Rating = (post.Rating + rating) / 2;
+            await _context.SaveChangesAsync();
+            await Clients.All.SendAsync("UpdateRating", post.Rating);
         }
     }
 }

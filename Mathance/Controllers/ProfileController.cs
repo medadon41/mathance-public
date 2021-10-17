@@ -102,7 +102,7 @@ namespace Mathance.Controllers
             _context.Posts.Remove(post);
             _context.SaveChanges();
 
-            return Redirect($"/Profiles/Profile?name={uname}");
+            return Redirect($"~/Profile?name={uname}");
         }
 
         [HttpPost]
@@ -118,7 +118,7 @@ namespace Mathance.Controllers
             post.Topic = newPost.Topic;
             post.Title = newPost.Title;
             post.Text = newPost.Text;
-            post.Author = post.Author = _context.Users.FirstOrDefault(i => i.UserName == name); 
+            post.Author = _context.Users.FirstOrDefault(i => i.UserName == name); 
 
             var tagslist = GetTags(post, tags);
             if (!post.Tags.SequenceEqual(tagslist) && tags.First() != null)
@@ -178,7 +178,7 @@ namespace Mathance.Controllers
                             File = new FileDescription(formFile.FileName, stream),
                         };
                         var uploadResult = _cloudinary.Upload(uploadParams);
-                        link = $"https://res.cloudinary.com/mddn41/image/upload/{formFile.FileName}";
+                        link = $"{uploadResult.Url}";
                     }
                     var img = new Image
                     {

@@ -1,9 +1,24 @@
-﻿@model Mathance.Models.Post
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer _localizer
+
+@model Mathance.Models.Post
+
 
 <div class="post-container">
     <div class="post-header">
-        <div class="post-title">
-         <h1>@Model.Title</h1>
+        <div class="post-title d-flex flex-row">
+         <h1>@Model.Title</h1> 
+         <div class="rating" id="@Model.Id">
+             @for(int i = 1; i <= @Model.Rating; i++)
+             {
+                <a href=~/css/ id="@i" class="star star-filled bi bi-star-fill"></a>
+             }
+             @for(int i = @Model.Rating + 1; i <= 5; i++)
+             {
+                <a href=~/css/ id="@i" class="star bi bi-star-fill"></a>
+             }
+         </div>
+          </div>
             @if(ViewBag.isSolved)
             {
              <button type="button" class="btn btn-green-light float-right">
@@ -42,10 +57,8 @@
                     </div>
                 </div>
             </div>
-         </div>
-         <p>Posted on @Model.PostedDate.ToString("HH:mm MM.dd.yyyy") by <a href="#">@Model.Author.UserName</a></p>
+         <p>Posted on @Model.PostedDate.ToString("HH:mm MM.dd.yyyy") by <a href="~/Profile?name=@Model.Author.UserName">@Model.Author.UserName</a></p>
          <p>Topic: <a href="#">@Model.Topic</a></p>
-
     </div>
     <div class="post-body">
          <div id="text">@Model.Text</div>
@@ -128,9 +141,8 @@
     }
     </div>
 </div>
-</div>
-<script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/comments.js"></script>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.7/marked.min.js"></script>
 <script>

@@ -1,7 +1,9 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Identity
 @using Mathance.Areas.Identity.Data
 @using System.Linq
 
+@inject IViewLocalizer _localizer
 @inject UserManager<MathanceUser> UserManager
 
 @model IEnumerable<Mathance.Areas.Identity.Data.MathanceUser>

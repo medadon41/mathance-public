@@ -23,6 +23,9 @@ namespace Mathance.Models
         [Required]
         public string Topic { get; set; }
 
+        [Required]
+        public int Rating { get; set; }
+
         public DateTime PostedDate { get; set; }
 
         public List<Tag> Tags { get; set; }

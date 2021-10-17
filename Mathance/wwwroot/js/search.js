@@ -15,7 +15,6 @@ connection.on("SearchResult", function (names) {
     }
 
     names.forEach(element => {
-        alert(names.length)
         div.appendChild(document.createElement("hr"));
         let h2 = document.createElement("h5");
         let title = document.createElement("a");

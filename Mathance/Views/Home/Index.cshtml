@@ -1,13 +1,66 @@
-﻿@model IEnumerable<Mathance.Models.Post>
+﻿
 
-<div class="text-center">
-    <h1 class="display-4">@ViewBag.title</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@model IEnumerable<Mathance.Models.Post>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-9 col-lg-3">
+            <div class="border rounded bg-light mb-3">
+                <div class="m-2 ml-3 mr-3">
+                    <form>
+                        <div class="form-group dropdown">
+                            <button class="btn btn-outline-success dropdown-toggle w-100" type="button" id="dropdownMenuButton"
+                                    data-toggle="dropdown">
+                                Sort by
+                            </button>
+                            <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" asp-action="Index" asp-controller="Home" asp-route-sort="Newest">Newest</a>
+                                <a class="dropdown-item" asp-action="Index" asp-controller="Home" asp-route-sort="Rating">Rating</a>
+                            </div>
+                        </div>
+                    </form>
+                    <hr/>
+                    <div>
+                        @foreach (var tagName in ViewBag.AllTags)
+                        {
+                            <a class="badge badge-success text-white">#@tagName</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-9 col-lg-9">
+            @foreach (var item in Model)
+            {
+                <div class="border rounded bg-light mb-2">
+                    <div id="search-results float-right h5 lead">
+                        <h5 class="text-center">
+                            <a href="~/Posts/Post/@item.Id">@item.Title</a>
+                        </h5>
+                        <div class="text-center align-text-top">
+                            @for(int i = 1; i <= @item.Rating; i++)
+                            {
+                                <i id="@i" class="star star-filled bi bi-star-fill"></i>
+                            }
+                            @for(int i = @item.Rating + 1; i <= 5; i++)
+                            {
+                                <i id="@i" class="star bi bi-star-fill"></i>
+                            }
+                        </div>
+                        <div class="info m-2">
+                        <h6 class="float-right font-weight-light"><a href="~/Profile?name=@item.Author.UserName">@item.Author.UserName </a><i class="bi bi-person-fill" style="color: grey"></i></h6>
+                        <h6 class="font-weight-light"><i class="bi bi-book-fill" style="color: grey"></i> @item.Topic</h6>
+                        <h6 class="float-right font-weight-light">@item.PostedDate.ToString("HH:mm MM.dd.yyyy") <i class="bi bi-clock-fill" style="color: grey"></i></h6>
+                        <h6 class="font-weight-light"><i class="bi bi-bookmark-dash-fill" style="color: grey"></i> @foreach(var tag in item.Tags)
+                            {
+                                @tag.Name
+                            }
+                        </h6>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
 </div>
-
-@ViewBag.Msg
-
-@foreach(var item in Model)
-{
-    <p>@item.Title</p>
-}

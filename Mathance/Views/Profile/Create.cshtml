@@ -1,4 +1,8 @@
-﻿@model Mathance.Models.Post
+﻿@using Microsoft.AspNetCore.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer _localizer
+
+@model Mathance.Models.Post
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.5/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
@@ -96,9 +100,12 @@
         iteratorForAnswers++;
     }
 
+    @{ var requestCulture = Context.Features.Get<IRequestCultureFeature>(); }
+    let currentLanguage = '@requestCulture.RequestCulture.UICulture.Name';
     $("#inputGroupFile01").fileinput({
         allowedFileTypes: ['image'],
         allowedFileExtensions : ['jpg', 'jpeg', 'png'],
+        language: currentLanguage,
         showZoom: false,
         uploadAsync: false,
         dropZoneEnabled: true,

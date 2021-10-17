@@ -18,6 +18,8 @@ using Mathance.Hubs;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using System.Text.Json;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace Mathance
 {
@@ -51,7 +53,21 @@ namespace Mathance
                .AddRoles<IdentityRole>()
                .AddEntityFrameworkStores<MathanceContext>();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                    .AddViewLocalization();
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[]
+                {
+                    new CultureInfo("en"),
+                    new CultureInfo("ru")
+                };
+                options.DefaultRequestCulture = new RequestCulture("en");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
+
             services.AddRazorPages();
             services.AddSignalR()
                 .AddJsonProtocol(options => {
@@ -109,6 +125,8 @@ namespace Mathance
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseRequestLocalization();
 
             app.UseUserDestroyer();
 

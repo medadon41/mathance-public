@@ -1,14 +1,19 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Identity
 @using Mathance.Areas.Identity.Data
 
 @model Mathance.Areas.Identity.Data.MathanceUser
 @inject UserManager<MathanceUser> UserManager
+@inject IViewLocalizer _localizer
 @{
     ViewData["Title"] = ViewBag.name;
 }
 <div class="user-stats text-center">
     <h2 class="display-4">@Model.UserName</h2>
-    <p>a little bit of your stats:</p>
+    @if (UserManager.GetUserId(User) == Model.Id || User.IsInRole("admin"))
+    {
+        <p>a little bit of your stats:</p>
+    }
     <div class="d-flex justify-content-between">
         <div>
             <h1 class="display-3">@Model.Posts.Count</h1>
@@ -28,18 +33,25 @@
 <hr />
 <div class="posts-container">
 @if(Model.Posts.Count == 0) {
-    <div class="empty-table text-center">
-    <h2 class="display-4">Your tasks list is empty</h2>
-    <h5>Time <a asp-controller="Profile" asp-action="Create" asp-route-name="@ViewBag.name">to create one</a>, isn't it?</h5>
-    </div>
+        <div class="empty-table text-center">
+            @if (UserManager.GetUserId(User) == Model.Id || User.IsInRole("admin"))
+            {
+                <h2 class="display-4">Your tasks list is empty</h2>
+                <h5>Time <a asp-controller="Profile" asp-action="Create" asp-route-name="@ViewBag.name">to create one</a>, isn't it?</h5>
+            } else
+            {
+                <h2 class="display-4">Tasks list is empty</h2>
+            }
+        </div>
 }
 else
 {
 <div class="text-center">
      @if (UserManager.GetUserId(User) == Model.Id || User.IsInRole("admin")) {
         <a asp-controller="Profile" asp-action="Create" asp-route-name="@ViewBag.name"><button class="btn btn-red-light" >Create a task</button></a>
+        <br />
      }
-<table class="table table-stripped text-center table-responsive-sm" id="users">
+<table class="table table-stripped text-center table-responsive-sm" id="table">
         <thead class="thead-dark">
             <tr>   
                 <th>
@@ -51,18 +63,18 @@ else
                 <th>
                     Posted Date
                 </th>
-                <th>
+                <th data-sort-method="none">
                     Comments
                 </th>
-                <th>
+                <th data-sort-method="none">
                     Watch
                 </th>
                     @if (UserManager.GetUserId(User) == Model.Id || User.IsInRole("admin"))
                     {
-                        <th>
+                        <th data-sort-method="none">
                             Edit
                         </th>
-                        <th>
+                        <th data-sort-method="none">
                             Delete
                         </th>
                     }
@@ -76,6 +88,14 @@ else
                 </th>
                 <th>
                     @Html.DisplayFor(modelItem => item.Title)
+                    @for(int i = 1; i <= @item.Rating; i++)
+                     {
+                        <i id="@i" class="star star-filled bi bi-star-fill" style="font-size: 10px;"></i>
+                     }
+                     @for(int i = @item.Rating + 1; i <= 5; i++)
+                     {
+                        <i id="@i" class="star bi bi-star-fill" style="font-size: 10px;"></i>
+                     }
                 </th>
                 <th>
                     @Html.DisplayFor(modelItem => item.PostedDate)
@@ -102,3 +122,7 @@ else
     </div>
 }
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js"></script>
+<script>
+    new Tablesort(document.getElementById('table'));
+</script>
