@@ -58,6 +58,8 @@ namespace Mathance.Controllers
                 ViewBag.isSolved = GetIfSolved(post, currentUser);
                 ViewBag.CurrentUser = currentUser;
             }
+
+            @ViewData["Title"] = post.Title;
             return View(post);
         }   
 

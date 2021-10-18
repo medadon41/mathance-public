@@ -71,7 +71,7 @@ body {
 }
 
 .header-logo {
-    max-width: 30%;
+    max-width: 50%;
     height: auto;
 }
 
@@ -173,4 +173,20 @@ a:hover {
 
 .img-small {
     max-width: 9.375em;
+}
+
+.star {
+    color: grey;
+}
+
+.star:hover {
+    color: grey;
+}
+
+.star-filled {
+    color: #ff9eb5;
+}
+
+.star-filled:hover {
+    color: #ff9eb5;
 }

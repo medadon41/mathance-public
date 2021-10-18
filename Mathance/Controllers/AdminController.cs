@@ -28,6 +28,8 @@ namespace Mathance.Controllers
         public IActionResult UsersTable()
         {
             var userlist = _context.Users.ToList();
+
+            @ViewData["Title"] = "Admin Panel";
             return View(userlist);
         }
         [Authorize(Roles = "admin")]

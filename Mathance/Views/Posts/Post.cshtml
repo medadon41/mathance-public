@@ -22,43 +22,43 @@
             @if(ViewBag.isSolved)
             {
              <button type="button" class="btn btn-green-light float-right">
-                    <i class="bi bi-check2"></i> Solved!
+                    <i class="bi bi-check2"></i> @_localizer["Solved"]
                 </button>
             } 
             else if(ViewBag.currentUser == null) {
                 <button type="button" class="btn btn-red-light-secondary float-right" data-toggle="modal" data-target="#answerSubmit" disabled>
-                    <i class="bi bi-lightbulb"></i> Submit a solution
+                    <i class="bi bi-lightbulb"></i> @_localizer["Solve"]
                 </button>
             }
             else
             {
                 <button type="button" class="btn btn-red-light float-right" data-toggle="modal" data-target="#answerSubmit">
-                    <i class="bi bi-lightbulb"></i> Submit a solution
+                    <i class="bi bi-lightbulb"></i> @_localizer["Solve"]
                 </button>
             }
             <div class="modal fade" id="answerSubmit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                             <h5 class="modal-title" id="exampleModalLabel">Submit an answer</h5>
+                             <h5 class="modal-title" id="exampleModalLabel">@_localizer["SubmitAnswer"]</h5>
                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                              </button>
                         </div>
                         <form method="post" asp-controller="Posts" asp-action="SubmitAnswer" asp-route-id=@Model.Id>
                         <div class="modal-body">
-                        <input type="text" class="form-control" placeholder="Your answer"/ name="answer">
+                        <input type="text" class="form-control" placeholder="@_localizer["YourAnswer"]"/ name="answer">
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-red-light-secondary">Check</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">@_localizer["Close"]</button>
+                            <button type="submit" class="btn btn-red-light-secondary">@_localizer["Check"]</button>
                         </div>
                         </form>
                     </div>
                 </div>
             </div>
-         <p>Posted on @Model.PostedDate.ToString("HH:mm MM.dd.yyyy") by <a href="~/Profile?name=@Model.Author.UserName">@Model.Author.UserName</a></p>
-         <p>Topic: <a href="#">@Model.Topic</a></p>
+         <p>@_localizer["PostedOn"] @Model.PostedDate.ToString("HH:mm MM.dd.yyyy") @_localizer["By"] <a href="~/Profile?name=@Model.Author.UserName">@Model.Author.UserName</a></p>
+         <p>@_localizer["Topic"] <a href="#">@Model.Topic</a></p>
     </div>
     <div class="post-body">
          <div id="text">@Model.Text</div>
@@ -75,7 +75,7 @@
                 </div>
             }
         </ul>
-        <p>Tags: 
+        <p>@_localizer["Tags"] 
             @foreach(var t in Model.Tags)
             {
                 <a class='badge badge-light'>@t.Name</a>
@@ -88,7 +88,7 @@
     @if(ViewBag.currentUser == null)
     {
         <div class="text-center">
-            <h6 class="font-weight-light">Please <a href="~/Identity/Account/Login">log in</a> to leave a comment</h6>
+            <h6 class="font-weight-light">@_localizer["Please"] <a href="~/Identity/Account/Login">@_localizer["LogIn"]</a> @_localizer["ToLeave"]</h6>
         </div>
         <hr/>
     } 
@@ -96,8 +96,8 @@
     {
     <form method="post">
         <div class="input-group mb-3">
-            <input type="text" class="form-control comment-input" id="comment-input" name="@ViewBag.CurrentUser.UserName" placeholder="Leave a comment" aria-describedby="button-addon2" name="text">
-                <button type="submit" class="btn btn-red-light" id="button-addon2" name="@Model.Id" href="#">Submit</button>
+            <input type="text" class="form-control comment-input" id="comment-input" name="@ViewBag.CurrentUser.UserName" placeholder="@_localizer["LeaveComm"]" aria-describedby="button-addon2" name="text">
+                <button type="submit" class="btn btn-red-light" id="button-addon2" name="@Model.Id" href="#">@_localizer["Submit"]</button>
         </div>
         </form>
     }
@@ -108,31 +108,37 @@
         {
             <div class="comment" id="@c.Id">
                 <div>
-                    @if (c.Author == null)
+                       <b>@c.Author.UserName </b> 
+                <i class="font-weight-light mt-1">@_localizer["On"] @c.PostedTime.ToString("HH:mm MM.dd.yy")</i></div>
+            <div>@c.Text</div>
+                    @if (@ViewBag.CurrentUser != null)
                     {
-                        <b>DELETED_USER </b>
-                    } 
+                        @if ((c.Likes.Select(a => a.User).ToList()).Contains(ViewBag.CurrentUser))
+                        {
+                            <a id="comment-like-@c.Id" class="comment-like bi bi-chevron-double-up" name="@ViewBag.CurrentUser.UserName" href="#"></a>
+                        } else
+                        {
+                            <a id="comment-like-@c.Id" class="comment-like bi bi-chevron-up" name="@ViewBag.CurrentUser.UserName" href="#"></a>
+                        }
+                    }
                     else
                     {
-                       <b>@c.Author.UserName </b> 
-                    }
-                <i class="font-weight-light mt-1">on @c.PostedTime.ToString("HH:mm MM.dd.yy")</i></div>
-            <div>@c.Text</div>
-                    @if ((c.Likes.Select(a => a.User).ToList()).Contains(ViewBag.CurrentUser))
-                    {
-                        <a id="comment-like-@c.Id" class="comment-like bi bi-chevron-double-up" name="@ViewBag.CurrentUser.UserName" href="#"></a>
-                    } else
-                    {
-                        <a id="comment-like-@c.Id" class="comment-like bi bi-chevron-up" name="@ViewBag.CurrentUser.UserName" href="#"></a>
+                           <a class="comment-like bi bi-chevron-up"></a>
                     }
             <label id="likes-count-@c.Id">@c.Likes.Count</label>
-
-                     @if ((c.Dislikes.Select(a => a.User).ToList()).Contains(ViewBag.CurrentUser))
+                    @if (@ViewBag.CurrentUser != null)
                     {
-                        <a id="comment-dislike-@c.Id" class="comment-dislike bi bi-chevron-double-down" name="@ViewBag.CurrentUser.UserName" href="#"></a>
-                    } else
+                        @if ((c.Dislikes.Select(a => a.User).ToList()).Contains(ViewBag.CurrentUser))
+                        {
+                            <a id="comment-dislike-@c.Id" class="comment-dislike bi bi-chevron-double-down" name="@ViewBag.CurrentUser.UserName" href="#"></a>
+                        } else
+                        {
+                            <a id="comment-dislike-@c.Id" class="comment-dislike bi bi-chevron-down" name="@ViewBag.CurrentUser.UserName" href="#"></a>
+                        }
+                    }
+                    else
                     {
-                        <a id="comment-dislike-@c.Id" class="comment-dislike bi bi-chevron-down" name="@ViewBag.CurrentUser.UserName" href="#"></a>
+                           <a class="comment-dislike bi bi-chevron-down"></a>
                     }
             <label id="dislikes-count-@c.Id">@c.Dislikes.Count</label>
             </div>
@@ -141,9 +147,12 @@
     }
     </div>
 </div>
-<script src="~/js/comments.js"></script>
 </div>
 
+@if (@ViewBag.CurrentUser != null)
+{
+    <script src="~/js/comments.js"></script>
+}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.7/marked.min.js"></script>
 <script>
     document.getElementById('text').innerHTML = marked("@Model.Text");

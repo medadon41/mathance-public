@@ -1,5 +1,7 @@
 ﻿using Mathance.Data;
 using Mathance.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -31,6 +33,7 @@ namespace Mathance.Controllers
             ViewBag.AllTags = _context.Tags.Select(t => t.Name).Distinct().ToList();
             if (sort == "Rating") posts = posts
                                           .OrderByDescending(r => r.Rating).ToList();
+
             return View(posts);
         }
 
@@ -41,6 +44,15 @@ namespace Mathance.Controllers
                 .Include(k => k.Comments)
                 .Include(t => t.Tags).ToList();
             return posts;
+        }
+
+        [HttpPost]
+        public IActionResult SetLanguage(string culture, string returnUrl)
+        {
+            Response.Cookies.Append(CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) });
+            return LocalRedirect(returnUrl);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

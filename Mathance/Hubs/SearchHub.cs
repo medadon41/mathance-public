@@ -20,19 +20,18 @@ namespace Mathance.Hubs
         {
             Post[] results = _context.Posts
                 .Where(f => EF.Functions.FreeText(f.Text, searchText)).ToArray();
+            
+            List<Comment> comments = _context.Comments
+                .Include(p=>p.Post)
+                .Where(f => EF.Functions.FreeText(f.Text, searchText)).ToList();
+               
+            var _results = comments.Select(p => p.Post).ToArray();
 
-            if(results.Length == 0)
-            {
-                List<Comment> comments = _context.Comments
-                    .Include(p=>p.Post)
-                    .Where(f => EF.Functions.FreeText(f.Text, searchText)).ToList();
-                if(comments.Count != 0)
-                {
-                    results = comments.Select(p => p.Post).ToArray();
-                }
-            }
 
-            await Clients.All.SendAsync("SearchResult", results);
+            foreach (var item in _results)
+                results.Append(item);
+
+            await Clients.All.SendAsync("SearchResult", results.Distinct().ToArray());
         }
 
     }

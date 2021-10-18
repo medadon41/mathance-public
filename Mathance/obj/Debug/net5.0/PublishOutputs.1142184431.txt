@@ -2,6 +2,7 @@ D:\itra\Mathance\obj\Debug\net5.0\PubTmp\Out\Mathance.exe
 D:\itra\Mathance\obj\Debug\net5.0\PubTmp\Out\wwwroot\css\site.css
 D:\itra\Mathance\obj\Debug\net5.0\PubTmp\Out\wwwroot\favicon.ico
 D:\itra\Mathance\obj\Debug\net5.0\PubTmp\Out\wwwroot\js\comments.js
+D:\itra\Mathance\obj\Debug\net5.0\PubTmp\Out\wwwroot\js\search.js
 D:\itra\Mathance\obj\Debug\net5.0\PubTmp\Out\wwwroot\js\signalr\dist\browser\signalr.js
 D:\itra\Mathance\obj\Debug\net5.0\PubTmp\Out\wwwroot\js\signalr\dist\browser\signalr.js.map
 D:\itra\Mathance\obj\Debug\net5.0\PubTmp\Out\wwwroot\js\signalr\dist\browser\signalr.min.js
@@ -228,6 +229,8 @@ D:\itra\Mathance\obj\Debug\net5.0\PubTmp\Out\libman.json
 D:\itra\Mathance\obj\Debug\net5.0\PubTmp\Out\Mathance.dll
 D:\itra\Mathance\obj\Debug\net5.0\PubTmp\Out\Mathance.runtimeconfig.json
 D:\itra\Mathance\obj\Debug\net5.0\PubTmp\Out\Mathance.pdb
+D:\itra\Mathance\obj\Debug\net5.0\PubTmp\Out\en\Mathance.resources.dll
+D:\itra\Mathance\obj\Debug\net5.0\PubTmp\Out\ru\Mathance.resources.dll
 D:\itra\Mathance\obj\Debug\net5.0\PubTmp\Out\AspNet.Security.OAuth.Vkontakte.dll
 D:\itra\Mathance\obj\Debug\net5.0\PubTmp\Out\Azure.Core.dll
 D:\itra\Mathance\obj\Debug\net5.0\PubTmp\Out\Azure.Extensions.AspNetCore.Configuration.Secrets.dll

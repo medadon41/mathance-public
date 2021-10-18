@@ -4,32 +4,36 @@
 
 @model Mathance.Models.Post
 
+@{
+    ViewData["Title"] = @_localizer["PageTitle"];
+}
+
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.5/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
 
-<h1 class="display-4">Create a task</h1>
+<h1 class="display-4">@_localizer["CreateTask"]</h1>
 <div class="container">
 <form method="post" enctype="multipart/form-data" asp-controller="Profile" asp-action="CreatePost" autocomplete="off" asp-route-name="@ViewBag.Name">
     <div class="container">
         <div class="form-group">        
-            <label for="topic">Topic</label>
+            <label for="topic">@_localizer["Topic"]</label>
             <select class="form-select" placeholder="Topic" name="topic" id="topic" required>
-                <option>Math</option>
-                <option>Java</option>
-                <option>.Net</option>
-                <option>C++</option>
-                <option>Python</option>
+                <option>@_localizer["HighMath"]</option>
+                <option>@_localizer["MathAnal"]</option>
+                <option>@_localizer["Algebra"]</option>
+                <option>@_localizer["Geometry"]</option>
+                <option>@_localizer["Programming"]</option>
             </select>
         </div>
         
         <div class="form-group">        
-            <label for="title">Title</label>
+            <label for="title">@_localizer["Title"]</label>
             <input type="text" class="form-control" placeholder="Title" name="title" id="title" required>
         </div>
 
         <div class="form-group">
             <div class="mdeContainer">
-                <label for="text">Text</label>
+                <label for="text">@_localizer["Text"]</label>
                 <textarea name="text" class="form-control" id="text" rows="5" required></textarea>
             </div>
         </div>
@@ -41,21 +45,21 @@
         </div>
         
         <div class="form-group">        
-            <label>Tags</label>
-            <input type="text" id="tag0" class="form-control" placeholder="Tag " name="tags" autocomplete="off" required>
+            <label>@_localizer["Tags"]</label>
+            <input type="text" id="tag0" class="form-control" placeholder="@_localizer["Tag"]" name="tags" autocomplete="off" required>
             <div id="inputTag"></div>
-            <button type="button" id="add-tag" class="btn btn-red-light-alt" onclick="addTagInput()">One more tag!</button>
+            <button type="button" id="add-tag" class="btn btn-red-light-alt" onclick="addTagInput()">@_localizer["OneMoreTag"]</button>
         </div>
 
         <div class="form-group">        
-            <label>Possible answers</label>
-            <input id="answer" type="text" class="form-control" placeholder="Answer" name="rightanswers" required>
+            <label>@_localizer["PossibleAnswers"]</label>
+            <input id="answer" type="text" class="form-control" placeholder="@_localizer["Answer"]" name="rightanswers" required>
             <div id="inputAnswer0"></div>
-            <button type="button" class="btn btn-red-light-alt" onclick="addAnswerInput()">One more answer!</button>
+            <button type="button" class="btn btn-red-light-alt" onclick="addAnswerInput()">@_localizer["OneMoreAnswer"]</button>
         </div>
         
         <div class="form-group text-right">
-            <input type="submit" class="btn btn-red-light" value="Create"/>
+            <input type="submit" class="btn btn-red-light" value="@_localizer["Create"]"/>
         </div>
     </div>
 </form>

@@ -11,28 +11,28 @@ connection.on("UpdateRating", function (rating) {
 });
 
 connection.on("ReceiveComment", function (user, message, dateposted, commid) {
-    var div = document.createElement("div");
+    let div = document.createElement("div");
     div.classList.add('comment');
     div.id = commid;
     document.querySelector(".comments").appendChild(div);
 
-    var innerdiv = document.createElement("div");
+    let innerdiv = document.createElement("div");
     div.appendChild(innerdiv);
 
-    var name = document.createElement("b");
+    let name = document.createElement("b");
     name.textContent = user;
     innerdiv.appendChild(name);
 
-    var date = document.createElement("i");
+    let date = document.createElement("i");
     date.textContent = dateposted;
     date.classList.add("font-weight-light");
     innerdiv.appendChild(date);
 
-    var commentdiv = document.createElement("div");
+    let commentdiv = document.createElement("div");
     commentdiv.textContent = message;
     div.appendChild(commentdiv);
 
-    var like = document.createElement("a");
+    let like = document.createElement("a");
     like.classList.add("comment-like", "bi", "bi-chevron-up");
     like.setAttribute("href", "#");
     like.setAttribute("name", user)
@@ -40,21 +40,21 @@ connection.on("ReceiveComment", function (user, message, dateposted, commid) {
     div.appendChild(like);
     like = document.getElementById("comment-like-"+commid)
     like.addEventListener("click", function (event) {
-        var user = like.name;
-        var commid = like.parentElement.id;
-        var postid =  document.querySelector(".comments").id;
+        let user = like.name;
+        let commid = like.parentElement.id;
+        let postid =  document.querySelector(".comments").id;
         connection.invoke("LikeComment", postid, commid, user).catch(function (err) {
             return console.error(err.toString());
         });
         event.preventDefault();
     })
 
-    var likecount = document.createElement("label");
+    let likecount = document.createElement("label");
     likecount.setAttribute("id", "likes-count-"+commid)
     likecount.textContent = " 0 ";
     div.appendChild(likecount);
     
-    var dislike = document.createElement("a");
+    let dislike = document.createElement("a");
     dislike.classList.add("comment-dislike", "bi", "bi-chevron-down");
     dislike.setAttribute("href", '#');
     dislike.setAttribute("name", user);
@@ -62,16 +62,16 @@ connection.on("ReceiveComment", function (user, message, dateposted, commid) {
     div.appendChild(dislike);
     dislike = document.getElementById("comment-dislike-"+commid)
     dislike.addEventListener("click", function (event) {
-        var user = dislike.name;
-        var commid = dislike.parentElement.id;
-        var postid =  document.querySelector(".comments").id;
+        let user = dislike.name;
+        let commid = dislike.parentElement.id;
+        let postid =  document.querySelector(".comments").id;
         connection.invoke("DislikeComment", postid, commid, user).catch(function (err) {
             return console.error(err.toString());
         });
         event.preventDefault();
     })
 
-    var dislikecount = document.createElement("label");
+    let dislikecount = document.createElement("label");
     dislikecount.setAttribute("id", "dislikes-count-"+commid)
     dislikecount.textContent = " 0 ";
     div.appendChild(dislikecount);
@@ -81,7 +81,7 @@ connection.on("ReceiveComment", function (user, message, dateposted, commid) {
 });
 
 connection.on("SearchResult", function (names) {
-    var div = document.getElementById("search-results");
+    let div = document.getElementById("search-results");
     while(div.firstChild) {
         div.removeChild(div.firstChild)
     }
@@ -98,7 +98,7 @@ connection.on("SearchResult", function (names) {
         div.appendChild(document.createElement("hr"));
         let h2 = document.createElement("h5");
         let title = document.createElement("a");
-        title.setAttribute("href", "https://localhost:44326/Posts/Post/"+element.id);
+        title.setAttribute("href", "https://mathance.azurewebsites.net/Posts/Post/"+element.id);
         title.textContent = element.title;
         h2.appendChild(title);
         div.appendChild(h2);
@@ -111,14 +111,14 @@ connection.on("SearchResult", function (names) {
 
 
 connection.on("ReceiveLike", function (comm, likesAmount, dislikesAmount, hasLiked) {
-    var likescount = document.getElementById("likes-count-"+comm)
+    let likescount = document.getElementById("likes-count-"+comm)
     likescount.textContent = likesAmount;
 
-    var dislikescount = document.getElementById("dislikes-count-"+comm)
+    let dislikescount = document.getElementById("dislikes-count-"+comm)
     dislikescount.textContent = dislikesAmount;
 
-    var likesymbol = document.getElementById("comment-like-"+comm);
-    var dislikesymbol = document.getElementById("comment-dislike-"+comm);
+    let likesymbol = document.getElementById("comment-like-"+comm);
+    let dislikesymbol = document.getElementById("comment-dislike-"+comm);
     if(hasLiked) {
         likesymbol.classList.replace('bi-chevron-up', 'bi-chevron-double-up');
         if(dislikesymbol.classList.contains("bi-chevron-double-down"));
@@ -130,14 +130,14 @@ connection.on("ReceiveLike", function (comm, likesAmount, dislikesAmount, hasLik
 });
 
 connection.on("ReceiveDislike", function (comm, likesAmount, dislikesAmount, hasDisliked) {
-    var likescount = document.getElementById("likes-count-"+comm)
+    let likescount = document.getElementById("likes-count-"+comm)
     likescount.textContent = likesAmount;
 
-    var dislikescount = document.getElementById("dislikes-count-"+comm)
+    let dislikescount = document.getElementById("dislikes-count-"+comm)
     dislikescount.textContent = dislikesAmount;
 
-    var likesymbol = document.getElementById("comment-like-"+comm);
-    var dislikesymbol = document.getElementById("comment-dislike-"+comm);
+    let likesymbol = document.getElementById("comment-like-"+comm);
+    let dislikesymbol = document.getElementById("comment-dislike-"+comm);
     if(hasDisliked) {
         dislikesymbol.classList.replace('bi-chevron-down', 'bi-chevron-double-down');
         if(likesymbol.classList.contains("bi-chevron-double-up"));
@@ -158,9 +158,9 @@ connection.start().then(function () {
 });
 
 document.getElementById("button-addon2").addEventListener("click", function (event) {
-    var user = document.getElementById("comment-input").name;
-    var message = document.getElementById("comment-input").value;
-    var postid =  document.getElementById("button-addon2").name;
+    let user = document.getElementById("comment-input").name;
+    let message = document.getElementById("comment-input").value;
+    let postid =  document.getElementById("button-addon2").name;
     connection.invoke("SendComment", postid, user, message).catch(function (err) {
         return console.error(err.toString());
     });
@@ -168,7 +168,7 @@ document.getElementById("button-addon2").addEventListener("click", function (eve
 });
 
 document.getElementById("search-button").addEventListener("click", function (event) {
-    var text = document.getElementById("search-input").value;
+    let text = document.getElementById("search-input").value;
     connection.invoke("TrySearch", text).catch(function (err) {
         return console.error(err.toString());
     });
@@ -176,12 +176,12 @@ document.getElementById("search-button").addEventListener("click", function (eve
 });
 
 function setLikeListenres() {
-    var likeslist = document.querySelectorAll(".comment-like").forEach(item =>
+    let likeslist = document.querySelectorAll(".comment-like").forEach(item =>
     {    
         item.addEventListener("click", function (event) {
-            var user = item.name;
-            var commid = item.parentElement.id;
-            var postid =  document.querySelector(".comments").id;
+            let user = item.name;
+            let commid = item.parentElement.id;
+            let postid =  document.querySelector(".comments").id;
             connection.invoke("LikeComment", postid, commid, user).catch(function (err) {
                 return console.error(err.toString());
             });
@@ -191,11 +191,11 @@ function setLikeListenres() {
 }
 
 function setDislikeListenres() {
-    var dislikeslist = document.querySelectorAll(".comment-dislike").forEach(item =>
+    let dislikeslist = document.querySelectorAll(".comment-dislike").forEach(item =>
     {    item.addEventListener("click", function (event) {
-            var user = item.name;
-            var commid = item.parentElement.id;
-            var postid =  document.querySelector(".comments").id;
+            let user = item.name;
+            let commid = item.parentElement.id;
+            let postid =  document.querySelector(".comments").id;
             connection.invoke("DislikeComment", postid, commid, user).catch(function (err) {
                 return console.error(err.toString());
             });
@@ -207,8 +207,8 @@ function setDislikeListenres() {
 document.querySelectorAll(".star").forEach(item =>{
     item.addEventListener("mouseover", function (event) {
         item.style.color = "#ef3038";
-        var stars = document.querySelector(".rating");
-        var star = stars.querySelector(".star");
+        let stars = document.querySelector(".rating");
+        let star = stars.querySelector(".star");
         for(let i = 1; i < item.id; i++) {
             star.style.color = "#ef3038";
             star = star.nextElementSibling;
@@ -222,8 +222,8 @@ document.querySelectorAll(".star").forEach(item =>{
         else {
             item.style.color = "grey";
         }
-        var stars = document.querySelector(".rating");
-        var star = stars.querySelector(".star");
+        let stars = document.querySelector(".rating");
+        let star = stars.querySelector(".star");
         for(let i = 1; i < item.id; i++) {
             if(star.classList.contains("star-filled")) {
                 star.style.color = "#ff9eb5";
@@ -236,8 +236,8 @@ document.querySelectorAll(".star").forEach(item =>{
     })
 
     item.addEventListener("click", function (event) {
-        var rate = item.id;
-        var postid =  document.querySelector(".rating").id;
+        let rate = item.id;
+        let postid =  document.querySelector(".rating").id;
         connection.invoke("Rate", rate, postid).catch(function (err) {
             return console.error(err.toString());
         });

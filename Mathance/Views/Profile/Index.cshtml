@@ -12,20 +12,20 @@
     <h2 class="display-4">@Model.UserName</h2>
     @if (UserManager.GetUserId(User) == Model.Id || User.IsInRole("admin"))
     {
-        <p>a little bit of your stats:</p>
+        <p>@_localizer["Stats"]</p>
     }
     <div class="d-flex justify-content-between">
         <div>
             <h1 class="display-3">@Model.Posts.Count</h1>
-            <p>tasks created</p>
+            <p>@_localizer["TasksCreated"]</p>
         </div>
         <div>
             <h1 class="display-3">@Model.RightAnswers.Count</h1>
-            <p>tasks solved</p>
+            <p>@_localizer["TasksSolved"]</p>
         </div>
         <div>
             <h1 class="display-3">@DateTime.UtcNow.Subtract(Model.RegDate).Days</h1>
-            <p>days with us</p>
+            <p>@_localizer["DaysWithUs"]</p>
         </div>
     </div>
 </div>
@@ -36,11 +36,11 @@
         <div class="empty-table text-center">
             @if (UserManager.GetUserId(User) == Model.Id || User.IsInRole("admin"))
             {
-                <h2 class="display-4">Your tasks list is empty</h2>
-                <h5>Time <a asp-controller="Profile" asp-action="Create" asp-route-name="@ViewBag.name">to create one</a>, isn't it?</h5>
+                <h2 class="display-4">@_localizer["YourEmptyList"]</h2>
+                <h5>@_localizer["Time"] <a asp-controller="Profile" asp-action="Create" asp-route-name="@ViewBag.name">@_localizer["Create"]</a>@_localizer["Isint"]</h5>
             } else
             {
-                <h2 class="display-4">Tasks list is empty</h2>
+                <h2 class="display-4">@_localizer["Emptyist"]</h2>
             }
         </div>
 }
@@ -48,34 +48,34 @@ else
 {
 <div class="text-center">
      @if (UserManager.GetUserId(User) == Model.Id || User.IsInRole("admin")) {
-        <a asp-controller="Profile" asp-action="Create" asp-route-name="@ViewBag.name"><button class="btn btn-red-light" >Create a task</button></a>
+        <a asp-controller="Profile" asp-action="Create" asp-route-name="@ViewBag.name"><button class="btn btn-red-light" >@_localizer["CreateButton"]</button></a>
         <br />
      }
 <table class="table table-stripped text-center table-responsive-sm" id="table">
         <thead class="thead-dark">
             <tr>   
                 <th>
-                    Topic
+                    @_localizer["Topic"]
                 </th>
                 <th>
-                    Title
+                    @_localizer["Title"]
                 </th>
                 <th>
-                    Posted Date
+                    @_localizer["PostedDate"]
                 </th>
                 <th data-sort-method="none">
-                    Comments
+                    @_localizer["Comments"]
                 </th>
                 <th data-sort-method="none">
-                    Watch
+                    @_localizer["Watch"]
                 </th>
                     @if (UserManager.GetUserId(User) == Model.Id || User.IsInRole("admin"))
                     {
                         <th data-sort-method="none">
-                            Edit
+                            @_localizer["Edit"]
                         </th>
                         <th data-sort-method="none">
-                            Delete
+                            @_localizer["Delete"]
                         </th>
                     }
             </tr>

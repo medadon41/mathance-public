@@ -1,36 +1,39 @@
-﻿
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer _localizer
 
 @model IEnumerable<Mathance.Models.Post>
-
+@{
+    ViewData["Title"] = @_localizer["Title"];
+}
 
 <div class="container">
-    <div class="row">
-        <div class="col-xs-9 col-lg-3">
+    <div>
+        <div class="col-xs-9 col-md-auto">
             <div class="border rounded bg-light mb-3">
-                <div class="m-2 ml-3 mr-3">
-                    <form>
-                        <div class="form-group dropdown">
-                            <button class="btn btn-outline-success dropdown-toggle w-100" type="button" id="dropdownMenuButton"
-                                    data-toggle="dropdown">
-                                Sort by
-                            </button>
-                            <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" asp-action="Index" asp-controller="Home" asp-route-sort="Newest">Newest</a>
-                                <a class="dropdown-item" asp-action="Index" asp-controller="Home" asp-route-sort="Rating">Rating</a>
-                            </div>
-                        </div>
-                    </form>
-                    <hr/>
+                <div class="m-2 ml-3 mr-3 text-center">
                     <div>
                         @foreach (var tagName in ViewBag.AllTags)
                         {
-                            <a class="badge badge-success text-white">#@tagName</a>
+                            <a class="badge badge-light">#@tagName</a>
                         }
                     </div>
+                    <hr/>
+                    <form>
+                        <div class="form-group dropdown">
+                            <button class="btn btn-red-light-secondary dropdown-toggle w-25" type="button" id="dropdownMenuButton"
+                                    data-toggle="dropdown">
+                                @_localizer["SortBy"]
+                            </button>
+                            <div class="dropdown-menu w-25" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" asp-action="Index" asp-controller="Home" asp-route-sort="Newest">@_localizer["Recent"]</a>
+                                <a class="dropdown-item" asp-action="Index" asp-controller="Home" asp-route-sort="Rating">@_localizer["Rating"]</a>
+                            </div>
+                        </div>
+                    </form> 
                 </div>
             </div>
         </div>
-        <div class="col-xs-9 col-lg-9">
+        <div class="col-xs-9 col-lg-md-auto">
             @foreach (var item in Model)
             {
                 <div class="border rounded bg-light mb-2">
@@ -54,7 +57,7 @@
                         <h6 class="float-right font-weight-light">@item.PostedDate.ToString("HH:mm MM.dd.yyyy") <i class="bi bi-clock-fill" style="color: grey"></i></h6>
                         <h6 class="font-weight-light"><i class="bi bi-bookmark-dash-fill" style="color: grey"></i> @foreach(var tag in item.Tags)
                             {
-                                @tag.Name
+                                <i>@tag.Name </i>
                             }
                         </h6>
                         </div>
