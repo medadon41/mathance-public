@@ -77,7 +77,7 @@ namespace Mathance.Hubs
                 currentComment.Likes.Remove(userLike);
                 await _context.SaveChangesAsync();
                 hasLiked = false;
-                await Clients.All.SendAsync("ReceiveLike", comm, currentComment.Likes.Count, currentComment.Dislikes.Count, hasLiked);
+                await Clients.All.SendAsync("ReceiveLike", comm, currentComment.Likes.Count, currentComment.Dislikes.Count, hasLiked, currentUser.UserName);
                 return;
             }
             currentComment.Likes.Add(new Like { Comment = currentComment, User = currentUser });
@@ -89,7 +89,7 @@ namespace Mathance.Hubs
                 currentComment.Dislikes.Remove(userDislike);
             }
             await _context.SaveChangesAsync();
-            await Clients.All.SendAsync("ReceiveLike", comm, currentComment.Likes.Count, currentComment.Dislikes.Count, hasLiked);
+            await Clients.All.SendAsync("ReceiveLike", comm, currentComment.Likes.Count, currentComment.Dislikes.Count, hasLiked, currentUser.UserName);
         }
 
         public async Task DislikeComment(string post, string comm, string user)
@@ -113,7 +113,7 @@ namespace Mathance.Hubs
                 currentComment.Dislikes.Remove(userLike);
                 await _context.SaveChangesAsync();
                 hasDisliked = false;
-                await Clients.All.SendAsync("ReceiveDislike", comm, currentComment.Likes.Count, currentComment.Dislikes.Count, hasDisliked);
+                await Clients.All.SendAsync("ReceiveDislike", comm, currentComment.Likes.Count, currentComment.Dislikes.Count, hasDisliked, currentUser.UserName);
                 return;
             }
             currentComment.Dislikes.Add(new Dislike { Comment = currentComment, User = currentUser });
@@ -126,7 +126,7 @@ namespace Mathance.Hubs
             }
             await _context.SaveChangesAsync();
 
-            await Clients.All.SendAsync("ReceiveDislike", comm, currentComment.Likes.Count, currentComment.Dislikes.Count, hasDisliked);
+            await Clients.All.SendAsync("ReceiveDislike", comm, currentComment.Likes.Count, currentComment.Dislikes.Count, hasDisliked, currentUser.UserName);
         }
 
         public async Task TrySearch(string searchText)

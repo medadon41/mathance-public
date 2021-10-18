@@ -14,7 +14,7 @@
                     <div>
                         @foreach (var tagName in ViewBag.AllTags)
                         {
-                            <a class="badge badge-light">#@tagName</a>
+                            <a class="badge badge-light" asp-action="Index" asp-controller="Home" asp-route-sort="@tagName">#@tagName</a>
                         }
                     </div>
                     <hr/>

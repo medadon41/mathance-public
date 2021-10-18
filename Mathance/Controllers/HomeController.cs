@@ -29,12 +29,26 @@ namespace Mathance.Controllers
         public IActionResult Index(string sort)
         {
             var posts = GetPostsList();
-            posts.Reverse();
             ViewBag.AllTags = _context.Tags.Select(t => t.Name).Distinct().ToList();
+            if (sort != "Rating" && sort != "Newest" && sort != null)
+            {
+                return View(SortByTag(posts, sort));
+            }
+            posts.Reverse();
             if (sort == "Rating") posts = posts
                                           .OrderByDescending(r => r.Rating).ToList();
 
             return View(posts);
+        }
+
+        private List<Post> SortByTag(List<Post> posts, string sort)
+        {
+            List<Post> sorted = new();
+             foreach (var item in posts)
+                foreach (var tag in item.Tags)
+                    if (tag.Name == sort)
+                        sorted.Add(item);
+            return sorted;
         }
 
         public List<Post> GetPostsList()

@@ -110,13 +110,15 @@ connection.on("SearchResult", function (names) {
 });
 
 
-connection.on("ReceiveLike", function (comm, likesAmount, dislikesAmount, hasLiked) {
+connection.on("ReceiveLike", function (comm, likesAmount, dislikesAmount, hasLiked, userCalled) {
     let likescount = document.getElementById("likes-count-"+comm)
     likescount.textContent = likesAmount;
 
     let dislikescount = document.getElementById("dislikes-count-"+comm)
     dislikescount.textContent = dislikesAmount;
 
+    let currentUser = document.getElementById("comment-input").name;
+    if(currentUser == userCalled) {
     let likesymbol = document.getElementById("comment-like-"+comm);
     let dislikesymbol = document.getElementById("comment-dislike-"+comm);
     if(hasLiked) {
@@ -127,15 +129,18 @@ connection.on("ReceiveLike", function (comm, likesAmount, dislikesAmount, hasLik
      else {
         likesymbol.classList.replace('bi-chevron-double-up', 'bi-chevron-up')     
     }
+}
 });
 
-connection.on("ReceiveDislike", function (comm, likesAmount, dislikesAmount, hasDisliked) {
+connection.on("ReceiveDislike", function (comm, likesAmount, dislikesAmount, hasDisliked, userCalled) {
     let likescount = document.getElementById("likes-count-"+comm)
     likescount.textContent = likesAmount;
 
     let dislikescount = document.getElementById("dislikes-count-"+comm)
     dislikescount.textContent = dislikesAmount;
 
+    let currentUser = document.getElementById("comment-input").name;
+    if(currentUser == userCalled) {
     let likesymbol = document.getElementById("comment-like-"+comm);
     let dislikesymbol = document.getElementById("comment-dislike-"+comm);
     if(hasDisliked) {
@@ -146,6 +151,7 @@ connection.on("ReceiveDislike", function (comm, likesAmount, dislikesAmount, has
      else {
         dislikesymbol.classList.replace('bi-chevron-double-down', 'bi-chevron-down')     
     }
+}
 });
 
 connection.start().then(function () {
